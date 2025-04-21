@@ -1082,7 +1082,15 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
       Snacks.toggle.diagnostics():map '<leader>td'
     end,
   },
-  { 'tpope/vim-fugitive' },
+  -- { 'tpope/vim-fugitive' },
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'sindrets/diffview.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+  },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
