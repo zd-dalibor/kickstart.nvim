@@ -164,6 +164,10 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Spell
+vim.opt.spelllang = 'en_us'
+-- vim.opt.spell = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -188,6 +192,23 @@ vim.diagnostic.config {
 }
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Diagnostic keymaps
+local diagnostic_goto = function(next, severity)
+  local count = next and 1 or -1
+  severity = severity and vim.diagnostic.severity[severity] or nil
+  return function()
+    vim.diagnostic.jump { count = count, severity = severity }
+  end
+end
+vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = '[D]iagnostics [Q]uickfix' })
+vim.keymap.set('n', '<leader>dl', vim.diagnostic.open_float, { desc = '[D]iagnostics [L]line' })
+vim.keymap.set('n', ']d', diagnostic_goto(true), { desc = 'Next Diagnostic' })
+vim.keymap.set('n', '[d', diagnostic_goto(false), { desc = 'Prev Diagnostic' })
+vim.keymap.set('n', ']e', diagnostic_goto(true, 'ERROR'), { desc = 'Next Error' })
+vim.keymap.set('n', '[e', diagnostic_goto(false, 'ERROR'), { desc = 'Prev Error' })
+vim.keymap.set('n', ']w', diagnostic_goto(true, 'WARN'), { desc = 'Next Warning' })
+vim.keymap.set('n', '[w', diagnostic_goto(false, 'WARN'), { desc = 'Prev Warning' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -320,6 +341,8 @@ require('lazy').setup({
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { 'gr', group = 'LSP Actions', mode = { 'n' } },
+        { '<leader>d', group = '[D]iagnostics' },
+        { '<leader>c', group = '[C]ode' },
       },
     },
   },
@@ -662,6 +685,7 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'markdownlint-cli2',
         'markdown-toc',
+        'cspell',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -672,7 +696,42 @@ require('lazy').setup({
       end
     end,
   },
+  {
+    'nvimtools/none-ls.nvim',
+    dependencies = { 'mason.nvim', 'davidmh/cspell.nvim' },
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = function()
+      local cspell = require 'cspell'
+      local ok, none_ls = pcall(require, 'null-ls')
+      if not ok then
+        return
+      end
 
+      local b = none_ls.builtins
+      local sources = {
+        b.completion.spell,
+        -- cspell
+        cspell.diagnostics.with {
+          -- Set the severity to HINT for unknown words
+          diagnostics_postprocess = function(diagnostic)
+            diagnostic.severity = vim.diagnostic.severity.HINT
+          end,
+          diagnostic_config = {
+            virtual_text = false,
+            signs = false,
+          },
+        },
+        cspell.code_actions,
+      }
+      -- Define the debounce value
+      local debounce_value = 200
+      return {
+        sources = sources,
+        debounce = debounce_value,
+        debug = true,
+      }
+    end,
+  },
   { -- Autoformat
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
@@ -825,7 +884,58 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      -- vim.cmd.colorscheme 'tokyonight-night'
+    end,
+  },
+  {
+    'joshdick/onedark.vim',
+    priority = 1000,
+    config = function()
+      vim.g.onedark_terminal_italics = 0
+      vim.g.onedark_termcolors = 256
+
+      -- vim.cmd.colorscheme 'onedark'
+    end,
+  },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    priority = 1000,
+    config = function()
+      require('catppuccin').setup {
+        no_italic = true,
+        integrations = {
+          native_lsp = {
+            enabled = true,
+            underlines = {
+              hints = { 'underdotted' },
+            },
+          },
+        },
+      }
+
+      -- vim.cmd.colorscheme 'catppuccin-mocha'
+    end,
+  },
+  {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('github-theme').setup {
+        groups = {
+          all = {
+            DiagnosticUnderlineHint = {
+              style = 'underdotted',
+            },
+          },
+        },
+      }
+
+      -- vim.cmd.colorscheme 'github_dark_colorblind'
+      -- vim.cmd.colorscheme 'github_dark_dimmed'
+      vim.cmd.colorscheme 'github_dark_default'
     end,
   },
 
@@ -872,7 +982,9 @@ require('lazy').setup({
       statusline.section_location = function() return '%2l:%-2v' end
 
       -- ... and there is more!
-      --  Check out: https://github.com/nvim-mini/mini.nvim
+      --  Check out: https://github.com/echasnovski/mini.nvim
+
+      require('mini.sessions').setup()
     end,
   },
 
@@ -912,13 +1024,26 @@ require('lazy').setup({
     'folke/snacks.nvim',
     priority = 1000,
     lazy = false,
-    ---@type snacks.Config
+    --- @module 'snacks'
+    --- @type snacks.Config
     opts = {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
       bigfile = { enabled = true },
-      dashboard = { enabled = true },
+      dashboard = {
+        enabled = true,
+        preset = {
+          header = [[
+                                                                     
+    _/      _/  _/_/_/_/    _/_/    _/      _/  _/_/_/  _/      _/   
+   _/_/    _/  _/        _/    _/  _/      _/    _/    _/_/  _/_/    
+  _/  _/  _/  _/_/_/    _/    _/  _/      _/    _/    _/  _/  _/     
+ _/    _/_/  _/        _/    _/    _/  _/      _/    _/      _/      
+_/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/       
+                                                                     ]],
+        },
+      },
       explorer = { enabled = true },
       indent = { enabled = true },
       input = { enabled = true },
@@ -929,6 +1054,9 @@ require('lazy').setup({
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      terminal = {
+        shell = 'pwsh.exe',
+      },
     },
     keys = {
       {
@@ -936,18 +1064,25 @@ require('lazy').setup({
         function()
           Snacks.picker.notifications()
         end,
-        desc = 'Notification History',
+        desc = '[N]otification History',
       },
       {
-        '<leader>z',
+        '<leader>tt',
         function()
-          Snacks.zen()
+          Snacks.terminal 'pwsh'
         end,
-        desc = 'Toggle Zen Mode',
+        desc = '[T]oggle [T]erminal',
       },
     },
-  },
+    config = function(_, opts)
+      require('snacks').setup(opts)
 
+      Snacks.toggle.zen():map '<leader>tz'
+      Snacks.toggle.option('spell', { name = 'Spelling' }):map '<leader>ts'
+      Snacks.toggle.diagnostics():map '<leader>td'
+    end,
+  },
+  { 'tpope/vim-fugitive' },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -968,6 +1103,7 @@ require('lazy').setup({
   require 'kickstart.plugins.markdown-preview',
   require 'kickstart.plugins.render-markdown',
   -- require 'kickstart.plugins.zen-mode',
+  require 'kickstart.plugins.copilot',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -998,6 +1134,9 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
+  },
+  checker = {
+    enabled = true,
   },
 })
 
