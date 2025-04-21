@@ -914,7 +914,7 @@ require('lazy').setup({
         },
       }
 
-      vim.cmd.colorscheme 'catppuccin-mocha'
+      -- vim.cmd.colorscheme 'catppuccin-mocha'
     end,
   },
   {
@@ -935,7 +935,7 @@ require('lazy').setup({
 
       -- vim.cmd.colorscheme 'github_dark_colorblind'
       -- vim.cmd.colorscheme 'github_dark_dimmed'
-      -- vim.cmd.colorscheme 'github_dark_default'
+      vim.cmd.colorscheme 'github_dark_default'
     end,
   },
 
@@ -1091,6 +1091,17 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
       'nvim-telescope/telescope.nvim',
     },
   },
+  {
+    'stevearc/oil.nvim',
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    -- Optional dependencies
+    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    lazy = false,
+  },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1112,6 +1123,7 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
   require 'kickstart.plugins.render-markdown',
   -- require 'kickstart.plugins.zen-mode',
   require 'kickstart.plugins.copilot',
+  require 'kickstart.plugins.copilot-chat',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
