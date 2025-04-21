@@ -1,5 +1,6 @@
 return {
   'MeanderingProgrammer/render-markdown.nvim',
+  dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' },
   opts = {
     code = {
       sign = false,
@@ -17,6 +18,7 @@ return {
   ft = { 'markdown', 'norg', 'rmd', 'org', 'codecompanion' },
   config = function(_, opts)
     require('render-markdown').setup(opts)
+    --- @module 'snacks'
     Snacks.toggle({
       name = 'Render Markdown',
       get = function()
@@ -30,6 +32,6 @@ return {
           m.disable()
         end
       end,
-    }):map '<leader>um'
+    }):map '<leader>tm'
   end,
 }
