@@ -165,6 +165,9 @@ vim.opt.confirm = true
 vim.opt.spelllang = 'en_us'
 -- vim.opt.spell = true
 
+-- Shell
+vim.o.shell = 'pwsh'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -471,6 +474,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      vim.keymap.set('n', '<leader>sF', function()
+        builtin.find_files { hidden = true, no_ignore = true }
+      end, { desc = '[S]earch [F]iles (hidden)' })
     end,
   },
 
@@ -988,6 +995,9 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       require('github-theme').setup {
+        options = {
+          -- transparent = true,
+        },
         groups = {
           all = {
             DiagnosticUnderlineHint = {
@@ -1134,9 +1144,6 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
       words = { enabled = true },
-      terminal = {
-        shell = 'pwsh.exe',
-      },
     },
     keys = {
       {
@@ -1149,7 +1156,7 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
       {
         '<leader>tt',
         function()
-          Snacks.terminal 'pwsh'
+          Snacks.terminal()
         end,
         desc = '[T]oggle [T]erminal',
       },
