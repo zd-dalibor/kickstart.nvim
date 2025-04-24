@@ -1001,7 +1001,7 @@ require('lazy').setup({
       }
 
       -- require('vscode').load 'dark'
-      vim.cmd.colorscheme 'vscode'
+      -- vim.cmd.colorscheme 'vscode'
     end,
   },
   {
@@ -1053,9 +1053,19 @@ require('lazy').setup({
     lazy = false,
     priority = 1000,
     config = function()
-      require('kanagawa').setup()
+      ---@diagnostic disable-next-line: missing-fields
+      require('kanagawa').setup {
+        commentStyle = { italic = false },
+        keywordStyle = { italic = false },
+        statementStyle = { bold = false },
+        overrides = function()
+          return {
+            DiagnosticUnderlineHint = { underdotted = true },
+          }
+        end,
+      }
       -- vim.cmd.colorscheme 'kanagawa-wave'
-      -- vim.cmd.colorscheme 'kanagawa-dragon'
+      vim.cmd.colorscheme 'kanagawa-dragon'
     end,
   },
   {
