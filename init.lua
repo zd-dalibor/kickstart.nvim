@@ -84,6 +84,10 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.opt.termguicolors = true
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -894,16 +898,40 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       -- vim.cmd.colorscheme 'tokyonight-night'
+      -- vim.cmd.colorscheme 'tokyonight-storm'
     end,
   },
   {
-    'joshdick/onedark.vim',
+    'olimorris/onedarkpro.nvim',
     priority = 1000,
     config = function()
-      vim.g.onedark_terminal_italics = 0
-      vim.g.onedark_termcolors = 256
+      require('onedarkpro').setup {
+        highlights = {
+          DiagnosticUnderlineHint = {
+            underdotted = true,
+          },
+        },
+      }
 
       -- vim.cmd.colorscheme 'onedark'
+      -- vim.cmd.colorscheme 'onelight'
+      -- vim.cmd.colorscheme 'onedark_vivid'
+      -- vim.cmd.colorscheme 'onedark_dark'
+    end,
+  },
+  {
+    'Mofiqul/vscode.nvim',
+    priority = 1000,
+    config = function()
+      require('vscode').setup {
+        disable_nvimtree_bg = true,
+        group_overrides = {
+          DiagnosticUnderlineError = { underdotted = true },
+        },
+      }
+
+      -- require('vscode').load 'dark'
+      vim.cmd.colorscheme 'vscode'
     end,
   },
   {
@@ -947,10 +975,27 @@ require('lazy').setup({
 
       -- vim.cmd.colorscheme 'github_dark_colorblind'
       -- vim.cmd.colorscheme 'github_dark_dimmed'
-      vim.cmd.colorscheme 'github_dark_default'
+      -- vim.cmd.colorscheme 'github_dark_default'
     end,
   },
-
+  {
+    'rebelot/kanagawa.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('kanagawa').setup()
+      -- vim.cmd.colorscheme 'kanagawa-wave'
+      -- vim.cmd.colorscheme 'kanagawa-dragon'
+    end,
+  },
+  {
+    'morhetz/gruvbox',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
@@ -997,6 +1042,7 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
 
       require('mini.sessions').setup()
+      require('mini.icons').setup()
     end,
   },
 
@@ -1106,8 +1152,8 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
     ---@type oil.SetupOpts
     opts = {},
     -- Optional dependencies
-    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
-    -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+    -- dependencies = { { 'echasnovski/mini.icons', opts = {} } },
+    dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if you prefer nvim-web-devicons
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
   },
@@ -1124,7 +1170,8 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.nvim-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   -- require 'kickstart.plugins.barbar',
   require 'kickstart.plugins.bufferline',
