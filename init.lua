@@ -903,6 +903,7 @@ require('lazy').setup({
   },
   {
     'olimorris/onedarkpro.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       require('onedarkpro').setup {
@@ -931,11 +932,12 @@ require('lazy').setup({
       }
 
       -- require('vscode').load 'dark'
-      -- vim.cmd.colorscheme 'vscode'
+      vim.cmd.colorscheme 'vscode'
     end,
   },
   {
     'catppuccin/nvim',
+    enabled = false,
     name = 'catppuccin',
     priority = 1000,
     config = function()
@@ -956,8 +958,8 @@ require('lazy').setup({
   },
   {
     'projekt0n/github-nvim-theme',
+    enabled = false,
     name = 'github-theme',
-    lazy = false,
     priority = 1000,
     config = function()
       require('github-theme').setup {
@@ -980,7 +982,7 @@ require('lazy').setup({
   },
   {
     'rebelot/kanagawa.nvim',
-    lazy = false,
+    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -995,12 +997,35 @@ require('lazy').setup({
         end,
       }
       -- vim.cmd.colorscheme 'kanagawa-wave'
-      vim.cmd.colorscheme 'kanagawa-dragon'
+      -- vim.cmd.colorscheme 'kanagawa-dragon'
+    end,
+  },
+  {
+    'thesimonho/kanagawa-paper.nvim',
+    enabled = false,
+    priority = 1000,
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('kanagawa-paper').setup {
+        styles = {
+          comment = { italic = false },
+          type = { italic = false },
+        },
+        overrides = function()
+          return {
+            DiagnosticUnderlineHint = { underdotted = true },
+          }
+        end,
+      }
+
+      -- vim.cmd.colorscheme 'kanagawa-paper'
+      -- vim.cmd.colorscheme 'kanagawa-paper-ink'
+      -- vim.cmd.colorscheme 'kanagawa-paper-canvas'
     end,
   },
   {
     'morhetz/gruvbox',
-    lazy = false,
+    enabled = false,
     priority = 1000,
     config = function()
       -- vim.cmd.colorscheme 'gruvbox'
