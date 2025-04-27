@@ -989,7 +989,7 @@ require('lazy').setup({
       require('vscode').setup {
         disable_nvimtree_bg = true,
         group_overrides = {
-          DiagnosticUnderlineError = { underdotted = true },
+          DiagnosticUnderlineHint = { underdotted = true },
         },
       }
 
