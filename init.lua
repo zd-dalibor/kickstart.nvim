@@ -945,7 +945,6 @@ require('lazy').setup({
   },
   {
     'catppuccin/nvim',
-    enabled = false,
     name = 'catppuccin',
     priority = 1000,
     config = function()
@@ -966,7 +965,6 @@ require('lazy').setup({
   },
   {
     'projekt0n/github-nvim-theme',
-    enabled = false,
     name = 'github-theme',
     priority = 1000,
     config = function()
@@ -990,7 +988,6 @@ require('lazy').setup({
   },
   {
     'rebelot/kanagawa.nvim',
-    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -1010,7 +1007,6 @@ require('lazy').setup({
   },
   {
     'thesimonho/kanagawa-paper.nvim',
-    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
