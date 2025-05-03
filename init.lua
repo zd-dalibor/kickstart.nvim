@@ -905,15 +905,22 @@ require('lazy').setup({
     'olimorris/onedarkpro.nvim',
     priority = 1000,
     config = function()
+      local color = require 'onedarkpro.helpers'
+      local colors = color.get_colors()
+
       require('onedarkpro').setup {
         highlights = {
+          NvimTreeRootFolder = { fg = colors.blue },
+          NvimTreeFolderIcon = { fg = colors.blue },
+          NvimTreeOpenedFolderName = { fg = colors.blue },
+          NvimTreeOpenedFile = { fg = colors.blue },
           DiagnosticUnderlineHint = {
             underdotted = true,
           },
         },
       }
 
-      vim.cmd.colorscheme 'onedark'
+      -- vim.cmd.colorscheme 'onedark'
       -- vim.cmd.colorscheme 'onelight'
       -- vim.cmd.colorscheme 'onedark_vivid'
       -- vim.cmd.colorscheme 'onedark_dark'
@@ -933,7 +940,7 @@ require('lazy').setup({
       }
 
       -- require('vscode').load 'dark'
-      -- vim.cmd.colorscheme 'vscode'
+      vim.cmd.colorscheme 'vscode'
     end,
   },
   {
