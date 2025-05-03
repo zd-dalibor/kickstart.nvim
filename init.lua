@@ -84,8 +84,8 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+-- vim.g.loaded_netrw = 1
+-- vim.g.loaded_netrwPlugin = 1
 vim.opt.termguicolors = true
 
 -- Set <space> as the leader key
@@ -973,7 +973,6 @@ require('lazy').setup({
   },
   {
     'olimorris/onedarkpro.nvim',
-    enabled = false,
     priority = 1000,
     config = function()
       require('onedarkpro').setup {
@@ -984,7 +983,7 @@ require('lazy').setup({
         },
       }
 
-      -- vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'onedark'
       -- vim.cmd.colorscheme 'onelight'
       -- vim.cmd.colorscheme 'onedark_vivid'
       -- vim.cmd.colorscheme 'onedark_dark'
@@ -997,12 +996,14 @@ require('lazy').setup({
       require('vscode').setup {
         disable_nvimtree_bg = true,
         group_overrides = {
-          DiagnosticUnderlineHint = { underdotted = true },
+          DiagnosticUnderlineHint = {
+            underdotted = true,
+          },
         },
       }
 
       -- require('vscode').load 'dark'
-      vim.cmd.colorscheme 'vscode'
+      -- vim.cmd.colorscheme 'vscode'
     end,
   },
   {
