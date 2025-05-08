@@ -501,12 +501,13 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
+    version = '1',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'williamboman/mason.nvim', opts = {} },
-      'williamboman/mason-lspconfig.nvim',
+      { 'williamboman/mason.nvim', version = '1', opts = {} },
+      { 'williamboman/mason-lspconfig.nvim', version = '1' },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -747,6 +748,13 @@ require('lazy').setup({
         'markdown-toc',
         'cspell',
       })
+      if vim.env.NIX_PATH then
+        vim.list_extend(ensure_installed, {
+          'nil_ls',
+          'nixfmt',
+        })
+      end
+
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
