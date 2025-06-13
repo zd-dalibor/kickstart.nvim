@@ -517,7 +517,6 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    version = '1',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -683,6 +682,19 @@ require('lazy').setup({
         marksman = {},
       }
 
+      -- Nix lsp
+      if vim.env.NIX_PATH then
+        servers = vim.tbl_extend('force', servers or {}, {
+          nil_ls = {},
+        })
+      end
+
+      ---@type MasonLspconfigSettings
+      ---@diagnostic disable-next-line: missing-fields
+      require('mason-lspconfig').setup {
+        automatic_enable = vim.tbl_keys(servers or {}),
+      }
+
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -698,9 +710,10 @@ require('lazy').setup({
         'markdown-toc',
         'cspell',
       })
+
+      -- Nix tools
       if vim.env.NIX_PATH then
         vim.list_extend(ensure_installed, {
-          'nil_ls',
           'nixfmt',
         })
       end
@@ -907,6 +920,7 @@ require('lazy').setup({
   },
   {
     'olimorris/onedarkpro.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       local color = require 'onedarkpro.helpers'
@@ -950,6 +964,7 @@ require('lazy').setup({
   {
     'catppuccin/nvim',
     name = 'catppuccin',
+    enabled = false,
     priority = 1000,
     config = function()
       require('catppuccin').setup {
@@ -970,6 +985,7 @@ require('lazy').setup({
   {
     'projekt0n/github-nvim-theme',
     name = 'github-theme',
+    enabled = false,
     priority = 1000,
     config = function()
       require('github-theme').setup {
@@ -992,6 +1008,7 @@ require('lazy').setup({
   },
   {
     'rebelot/kanagawa.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -1011,6 +1028,7 @@ require('lazy').setup({
   },
   {
     'thesimonho/kanagawa-paper.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -1039,6 +1057,7 @@ require('lazy').setup({
       -- vim.cmd.colorscheme 'gruvbox'
     end,
   },
+
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
