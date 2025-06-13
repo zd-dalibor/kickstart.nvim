@@ -505,13 +505,12 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    version = '1',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'mason-org/mason.nvim', version = '1', opts = {} },
-      { 'mason-org/mason-lspconfig.nvim', version = '1' },
+      { 'mason-org/mason.nvim', opts = {} },
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -686,12 +685,6 @@ require('lazy').setup({
         },
       }
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -732,6 +725,19 @@ require('lazy').setup({
         marksman = {},
       }
 
+      -- Nix lsp
+      if vim.env.NIX_PATH then
+        servers = vim.tbl_extend('force', servers or {}, {
+          nil_ls = {},
+        })
+      end
+
+      ---@type MasonLspconfigSettings
+      ---@diagnostic disable-next-line: missing-fields
+      require('mason-lspconfig').setup {
+        automatic_enable = vim.tbl_keys(servers or {}),
+      }
+
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -752,29 +758,22 @@ require('lazy').setup({
         'markdown-toc',
         'cspell',
       })
+
+      -- Nix tools
       if vim.env.NIX_PATH then
         vim.list_extend(ensure_installed, {
-          'nil_ls',
           'nixfmt',
         })
       end
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      for server_name, config in pairs(servers) do
+        vim.lsp.config(server_name, config)
+      end
+
+      -- NOTE: Some servers may require an old setup until they are updated. For the full list refer here: https://github.com/neovim/nvim-lspconfig/issues/3705
+      -- These servers will have to be manually set up with require("lspconfig").server_name.setup{}
     end,
   },
   {
@@ -977,6 +976,7 @@ require('lazy').setup({
   },
   {
     'olimorris/onedarkpro.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       local color = require 'onedarkpro.helpers'
@@ -1020,6 +1020,7 @@ require('lazy').setup({
   {
     'catppuccin/nvim',
     name = 'catppuccin',
+    enabled = false,
     priority = 1000,
     config = function()
       require('catppuccin').setup {
@@ -1040,6 +1041,7 @@ require('lazy').setup({
   {
     'projekt0n/github-nvim-theme',
     name = 'github-theme',
+    enabled = false,
     priority = 1000,
     config = function()
       require('github-theme').setup {
@@ -1062,6 +1064,7 @@ require('lazy').setup({
   },
   {
     'rebelot/kanagawa.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -1081,6 +1084,7 @@ require('lazy').setup({
   },
   {
     'thesimonho/kanagawa-paper.nvim',
+    enabled = false,
     priority = 1000,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -1109,6 +1113,7 @@ require('lazy').setup({
       -- vim.cmd.colorscheme 'gruvbox'
     end,
   },
+
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
