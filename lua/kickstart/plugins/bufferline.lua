@@ -9,6 +9,7 @@ return {
   },
   opts = {
     options = {
+      always_show_bufferline = false,
       offsets = {
         {
           filetype = 'neo-tree',
