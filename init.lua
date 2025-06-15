@@ -84,6 +84,11 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- Update LD_LIBRARY_PATH if NIX_LD_LIBRARY_PATH is set
+if vim.env.NIX_LD_LIBRARY_PATH then
+  vim.env.LD_LIBRARY_PATH = ((vim.env.LD_LIBRARY_PATH and vim.env.LD_LIBRARY_PATH .. ':') or '') .. vim.env.NIX_LD_LIBRARY_PATH
+end
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -902,6 +907,7 @@ require('lazy').setup({
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'folke/tokyonight.nvim',
+    enabled = false,
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
@@ -946,6 +952,7 @@ require('lazy').setup({
   },
   {
     'Mofiqul/vscode.nvim',
+    -- enabled = false,
     priority = 1000,
     config = function()
       require('vscode').setup {
@@ -1241,8 +1248,8 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
   require 'kickstart.plugins.markdown-preview',
   require 'kickstart.plugins.render-markdown',
   -- require 'kickstart.plugins.zen-mode',
-  require 'kickstart.plugins.copilot',
-  require 'kickstart.plugins.copilot-chat',
+  -- require 'kickstart.plugins.copilot',
+  -- require 'kickstart.plugins.copilot-chat',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
