@@ -174,7 +174,29 @@ vim.o.spelllang = 'en_us'
 -- vim.opt.spell = true
 
 -- Shell
-vim.o.shell = 'pwsh'
+local function get_user_shell()
+  -- Try to get user's default shell
+  local user_shell = os.getenv 'SHELL'
+
+  if user_shell then
+    local shell_name = user_shell:match '([^/]+)$' -- extract shell name
+    if vim.fn.executable(shell_name) == 1 then
+      return shell_name
+    end
+  end
+
+  -- Fallback to detection
+  local shells = { 'pwsh', 'zsh', 'bash', 'sh' }
+  for _, shell in ipairs(shells) do
+    if vim.fn.executable(shell) == 1 then
+      return shell
+    end
+  end
+
+  return 'sh'
+end
+
+vim.o.shell = get_user_shell()
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
