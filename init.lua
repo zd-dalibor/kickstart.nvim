@@ -974,7 +974,7 @@ require('lazy').setup({
   },
   {
     'Mofiqul/vscode.nvim',
-    -- enabled = false,
+    enabled = false,
     priority = 1000,
     config = function()
       require('vscode').setup {
@@ -987,7 +987,7 @@ require('lazy').setup({
       }
 
       -- require('vscode').load 'dark'
-      vim.cmd.colorscheme 'vscode'
+      -- vim.cmd.colorscheme 'vscode'
     end,
   },
   {
@@ -1084,6 +1084,18 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       -- vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
+  {
+    'vague2k/vague.nvim',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other plugins
+    config = function()
+      -- NOTE: you do not need to call setup if you don't want to.
+      require('vague').setup {
+        -- optional configuration here
+      }
+      vim.cmd 'colorscheme vague'
     end,
   },
 
