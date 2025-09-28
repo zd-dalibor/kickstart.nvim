@@ -712,7 +712,15 @@ require('lazy').setup({
       -- Nix lsp
       if vim.env.NIX_PATH then
         servers = vim.tbl_extend('force', servers or {}, {
-          nil_ls = {},
+          nil_ls = {
+            settings = {
+              ['nil'] = {
+                formatting = {
+                  command = { 'nixfmt' },
+                },
+              },
+            },
+          },
         })
       end
 
