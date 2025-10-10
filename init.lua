@@ -84,6 +84,8 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+vim.opt.termguicolors = true
+
 -- Update LD_LIBRARY_PATH if NIX_LD_LIBRARY_PATH is set
 if vim.env.NIX_LD_LIBRARY_PATH then
   vim.env.LD_LIBRARY_PATH = ((vim.env.LD_LIBRARY_PATH and vim.env.LD_LIBRARY_PATH .. ':') or '') .. vim.env.NIX_LD_LIBRARY_PATH
