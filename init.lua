@@ -1168,9 +1168,9 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
   -- require 'kickstart.plugins.barbar',
   require 'kickstart.plugins.bufferline',
   require 'kickstart.plugins.markdown-preview',
-  require 'kickstart.plugins.render-markdown',
+  -- require 'kickstart.plugins.render-markdown',
   -- require 'kickstart.plugins.zen-mode',
-  -- require 'kickstart.plugins.copilot',
+  require 'kickstart.plugins.copilot',
   -- require 'kickstart.plugins.copilot-chat',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

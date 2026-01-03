@@ -1,3 +1,8 @@
 return {
-  'github/copilot.vim',
+  'zbirenbaum/copilot.lua',
+  lazy = false,
+  opts = {
+    suggestion = { enabled = true, auto_trigger = true },
+    panel = { enabled = true },
+  },
 }
