@@ -1167,8 +1167,8 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   -- require 'kickstart.plugins.barbar',
   require 'kickstart.plugins.bufferline',
-  require 'kickstart.plugins.markdown-preview',
-  -- require 'kickstart.plugins.render-markdown',
+  -- require 'kickstart.plugins.markdown-preview',
+  require 'kickstart.plugins.render-markdown',
   -- require 'kickstart.plugins.zen-mode',
   require 'kickstart.plugins.copilot',
   -- require 'kickstart.plugins.copilot-chat',
