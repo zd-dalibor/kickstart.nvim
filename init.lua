@@ -552,14 +552,13 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       {
         'mason-org/mason.nvim',
-        version = '1',
         ---@module 'mason.settings'
         ---@type MasonSettings
         ---@diagnostic disable-next-line: missing-fields
         opts = {},
       },
       -- Maps LSP server names between nvim-lspconfig and Mason package names.
-      { 'mason-org/mason-lspconfig.nvim', version = '1' },
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
