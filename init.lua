@@ -785,6 +785,7 @@ require('lazy').setup({
           diagnostic_config = {
             virtual_text = false,
             signs = false,
+            underline = { severity = vim.diagnostic.severity.HINT },
           },
         },
         cspell.code_actions,
@@ -957,7 +958,6 @@ require('lazy').setup({
   },
   {
     'Mofiqul/vscode.nvim',
-    enabled = false,
     priority = 1000,
     config = function()
       require('vscode').setup {
@@ -965,6 +965,8 @@ require('lazy').setup({
         group_overrides = {
           DiagnosticUnderlineHint = {
             underdotted = true,
+            undercurl = false,
+            underline = false,
           },
         },
       }
@@ -980,7 +982,14 @@ require('lazy').setup({
     config = function()
       -- NOTE: you do not need to call setup if you don't want to.
       require('vague').setup {
-        -- optional configuration here
+        on_highlights = function(hl, colors)
+          hl.DiagnosticUnderlineHint = {
+            underdotted = true,
+            undercurl = false,
+            underline = false,
+            sp = colors.comment,
+          }
+        end,
       }
       vim.cmd 'colorscheme vague'
     end,
