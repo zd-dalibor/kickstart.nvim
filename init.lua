@@ -182,17 +182,13 @@ local function get_user_shell()
 
   if user_shell then
     local shell_name = user_shell:match '([^/]+)$' -- extract shell name
-    if vim.fn.executable(shell_name) == 1 then
-      return shell_name
-    end
+    if vim.fn.executable(shell_name) == 1 then return shell_name end
   end
 
   -- Fallback to detection
   local shells = { 'pwsh', 'zsh', 'bash', 'sh' }
   for _, shell in ipairs(shells) do
-    if vim.fn.executable(shell) == 1 then
-      return shell
-    end
+    if vim.fn.executable(shell) == 1 then return shell end
   end
 
   return 'sh'
@@ -229,9 +225,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 local diagnostic_goto = function(next, severity)
   local count = next and 1 or -1
   severity = severity and vim.diagnostic.severity[severity] or nil
-  return function()
-    vim.diagnostic.jump { count = count, severity = severity }
-  end
+  return function() vim.diagnostic.jump { count = count, severity = severity } end
 end
 vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = '[D]iagnostics [Q]uickfix' })
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.open_float, { desc = '[D]iagnostics [L]line' })
@@ -410,9 +404,7 @@ require('lazy').setup({
 
         -- `cond` is a condition used to determine whether this plugin should be
         -- installed and loaded.
-        cond = function()
-          return vim.fn.executable 'cmake' == 1
-        end,
+        cond = function() return vim.fn.executable 'cmake' == 1 end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
@@ -532,13 +524,9 @@ require('lazy').setup({
       )
 
       -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
 
-      vim.keymap.set('n', '<leader>sF', function()
-        builtin.find_files { hidden = true, no_ignore = true }
-      end, { desc = '[S]earch [F]iles (hidden)' })
+      vim.keymap.set('n', '<leader>sF', function() builtin.find_files { hidden = true, no_ignore = true } end, { desc = '[S]earch [F]iles (hidden)' })
     end,
   },
 
@@ -745,14 +733,13 @@ require('lazy').setup({
         'markdownlint-cli2',
         'markdown-toc',
         'cspell',
+        'jsonls',
       })
 
       -- Nix tools
-      if vim.env.NIX_PATH then
-        vim.list_extend(ensure_installed, {
-          'nixfmt',
-        })
-      end
+      if vim.env.NIX_PATH then vim.list_extend(ensure_installed, {
+        'nixfmt',
+      }) end
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -769,9 +756,7 @@ require('lazy').setup({
     opts = function()
       local cspell = require 'cspell'
       local ok, none_ls = pcall(require, 'null-ls')
-      if not ok then
-        return
-      end
+      if not ok then return end
 
       local b = none_ls.builtins
       local sources = {
@@ -779,9 +764,7 @@ require('lazy').setup({
         -- cspell
         cspell.diagnostics.with {
           -- Set the severity to HINT for unknown words
-          diagnostics_postprocess = function(diagnostic)
-            diagnostic.severity = vim.diagnostic.severity.HINT
-          end,
+          diagnostics_postprocess = function(diagnostic) diagnostic.severity = vim.diagnostic.severity.HINT end,
           diagnostic_config = {
             virtual_text = false,
             signs = false,
@@ -1052,7 +1035,25 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'rust', 'powershell', 'yaml', 'xml' }
+      local parsers = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'rust',
+        'powershell',
+        'yaml',
+        'xml',
+        'json',
+        'javascript',
+      }
       require('nvim-treesitter').install(parsers)
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
@@ -1115,16 +1116,12 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
     keys = {
       {
         '<leader>n',
-        function()
-          Snacks.picker.notifications()
-        end,
+        function() Snacks.picker.notifications() end,
         desc = '[N]otification History',
       },
       {
         '<leader>tt',
-        function()
-          Snacks.terminal()
-        end,
+        function() Snacks.terminal() end,
         desc = '[T]oggle [T]erminal',
       },
     },
@@ -1170,8 +1167,8 @@ _/      _/  _/_/_/_/    _/_/        _/      _/_/_/  _/      _/
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.nvim-tree',
+  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.nvim-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   -- require 'kickstart.plugins.barbar',
   require 'kickstart.plugins.bufferline',
